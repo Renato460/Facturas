@@ -26,10 +26,10 @@ public class Ingreso extends JFrame {
     private JLabel numeroRequerido;
     private JLabel nombreRequerido;
     private JLabel netoRequerido;
+    private JPanel jDate;
     //private List<String> facturaRevisada;
 
     public Ingreso(){
-
         add(jPanelP);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(480,400);

@@ -1,8 +1,10 @@
 package Model;
 
 import com.sun.istack.NotNull;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table (name = "facturas")
@@ -11,6 +13,11 @@ public class Facturas {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private int id;
+
+    @Column (name = "fecha")
+    @NotNull
+    @Type(type="date")
+    private Date fecha;
 
     @Column (name = "numFactura")
     @NotNull
@@ -40,6 +47,22 @@ public class Facturas {
     @ManyToOne
     @JoinColumn(name="rut", nullable=false)
     private Empresa empresa;
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
 
     public int getId() {
         return id;

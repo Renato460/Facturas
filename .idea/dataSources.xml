@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="org.hibernate.tutorial.jpa/Hibernate" uuid="0df10a2c-080a-4758-970d-0151f9a7222a">
+      <imported>true</imported>
+      <configured-by-url>true</configured-by-url>
+      <remarks>Hibernate
+
+F:/Proyectos/ClubFacturas/src/main/resources/META-INF/persistence.xml</remarks>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://localhost:3306/libroFacturas?serverTimezone=UTC</jdbc-url>
+    </data-source>
+  </component>
+</project>

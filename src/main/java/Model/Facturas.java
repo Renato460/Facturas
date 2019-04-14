@@ -25,24 +25,24 @@ public class Facturas {
 
     @Column (name = "neto")
     @NotNull
-    private Integer neto;
+    private Double neto;
 
     @Column (name = "iva")
     @NotNull
-    private Integer iva;
+    private Double iva;
 
     @Column (name = "harina")
-    private Integer harina;
+    private Double harina;
 
     @Column (name = "ila")
-    private Integer ila;
+    private Double ila;
 
     @Column (name = "carne")
-    private Integer carne;
+    private Double carne;
 
     @Column (name = "total")
     @NotNull
-    private Integer total;
+    private Double total;
 
     @ManyToOne
     @JoinColumn(name="rut", nullable=false)
@@ -80,51 +80,51 @@ public class Facturas {
         this.numFactura = numFactura;
     }
 
-    public Integer getNeto() {
+    public Double getNeto() {
         return neto;
     }
 
-    public void setNeto(Integer neto) {
+    public void setNeto(Double neto) {
         this.neto = neto;
     }
 
-    public Integer getIva() {
+    public Double getIva() {
         return iva;
     }
 
-    public void setIva(Integer iva) {
+    public void setIva(Double iva) {
         this.iva = iva;
     }
 
-    public Integer getHarina() {
+    public Double getHarina() {
         return harina;
     }
 
-    public void setHarina(Integer harina) {
+    public void setHarina(Double harina) {
         this.harina = harina;
     }
 
-    public Integer getIla() {
+    public Double getIla() {
         return ila;
     }
 
-    public void setIla(Integer ila) {
+    public void setIla(Double ila) {
         this.ila = ila;
     }
 
-    public Integer getCarne() {
+    public Double getCarne() {
         return carne;
     }
 
-    public void setCarne(Integer carne) {
+    public void setCarne(Double carne) {
         this.carne = carne;
     }
 
-    public Integer getTotal() {
+    public Double getTotal() {
         return total;
     }
 
-    public void setTotal(Integer total) {
+    public void setTotal(Double total) {
         this.total = total;
     }
 }

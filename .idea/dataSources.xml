@@ -10,5 +10,15 @@ F:/Proyectos/ClubFacturas/src/main/resources/META-INF/persistence.xml</remarks>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://localhost:3306/libroFacturas?serverTimezone=UTC</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="hibernate.cfg.xml/Hibernate" uuid="7cda089a-bb2d-4ec2-9732-cd75cfe38637">
+      <synchronize>true</synchronize>
+      <imported>true</imported>
+      <configured-by-url>true</configured-by-url>
+      <remarks>Hibernate
+
+F:/Proyectos/ClubFacturas/src/main/resources/hibernate.cfg.xml</remarks>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://localhost:3306/libroFacturas</jdbc-url>
+    </data-source>
   </component>
 </project>

@@ -1,7 +1,6 @@
 import Model.Facturas;
 import views.Ingreso;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.swing.*;
@@ -15,7 +14,7 @@ public class Main {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("org.hibernate.tutorial.jpa");
 
         Facturas factura = new Facturas();
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        //EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManagerFactory.close();
     }
 }

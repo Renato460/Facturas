@@ -1,5 +1,6 @@
 package Model;
 
+
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
@@ -22,6 +23,35 @@ public class Empresa {
     @OneToMany(mappedBy = "empresa")
     private Set<Facturas> facturas;
 
+    @OneToMany(mappedBy = "empresa")
+    private Set<NotasDeCreditos> notasDeCreditos;
+
+    public static Empresa getUserById(String rut) {
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("org.hibernate.tutorial.jpa");;
+       EntityManager entityManager = entityManagerFactory.createEntityManager();
+       EntityTransaction entityTransaction = null;
+       try{
+           entityTransaction = entityManager.getTransaction();
+           entityTransaction.begin();
+
+           Empresa empresa = entityManager.find(Empresa.class, rut);
+           entityTransaction.commit();
+           return empresa;
+       }catch (RuntimeException e){
+           if (entityTransaction.isActive())entityTransaction.rollback();
+           throw e;
+       }
+
+    }
+
+    public Set<Facturas> getFacturas() {
+        return facturas;
+    }
+
+    public void setFacturas(Set<Facturas> facturas) {
+        this.facturas = facturas;
+    }
+
     public String getRut() {
         return rut;
     }
@@ -36,5 +66,13 @@ public class Empresa {
 
     public void setNombre(String empresa) {
         this.nombre = empresa;
+    }
+
+    public Set<NotasDeCreditos> getNotasDeCreditos() {
+        return notasDeCreditos;
+    }
+
+    public void setNotasDeCreditos(Set<NotasDeCreditos> notasDeCreditos) {
+        this.notasDeCreditos = notasDeCreditos;
     }
 }

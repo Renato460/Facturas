@@ -23,9 +23,6 @@ public class Empresa {
     @OneToMany(mappedBy = "empresa")
     private Set<Facturas> facturas;
 
-    @OneToMany(mappedBy = "empresa")
-    private Set<NotasDeCreditos> notasDeCreditos;
-
     public static Empresa getUserById(String rut) {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("org.hibernate.tutorial.jpa");;
        EntityManager entityManager = entityManagerFactory.createEntityManager();
@@ -41,7 +38,6 @@ public class Empresa {
            if (entityTransaction.isActive())entityTransaction.rollback();
            throw e;
        }
-
     }
 
     public Set<Facturas> getFacturas() {
@@ -66,13 +62,5 @@ public class Empresa {
 
     public void setNombre(String empresa) {
         this.nombre = empresa;
-    }
-
-    public Set<NotasDeCreditos> getNotasDeCreditos() {
-        return notasDeCreditos;
-    }
-
-    public void setNotasDeCreditos(Set<NotasDeCreditos> notasDeCreditos) {
-        this.notasDeCreditos = notasDeCreditos;
     }
 }

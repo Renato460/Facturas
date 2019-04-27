@@ -14,6 +14,10 @@ public class Facturas {
     @Column(name = "id", updatable = false, nullable = false)
     private int id;
 
+    @Column (name = "tipo")
+    @NotNull
+    private String tipo;
+
     @Column (name = "fecha")
     @NotNull
     @Type(type="date")
@@ -47,6 +51,14 @@ public class Facturas {
     @ManyToOne
     @JoinColumn(name="rut", nullable=false)
     private Empresa empresa;
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
 
     public Date getFecha() {
         return fecha;

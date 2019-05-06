@@ -9,6 +9,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +36,6 @@ public class Ingreso extends JFrame {
     private JTextField textFecha;
     private JLabel rutRequerido;
     private JLabel labelFac;
-    private JLabel check;
     //private List<String> facturaRevisada;
     private Double neto;
     private Double iva;
@@ -52,7 +54,6 @@ public class Ingreso extends JFrame {
         this.nombreRequerido.setVisible(false);
         this.netoRequerido.setVisible(false);
         this.setVisible(true);
-        this.check.setVisible(false);
         this.textNeto.setText("0");
         this.textIva.setText("0");
         this.textCarne.setText("0");
@@ -82,21 +83,22 @@ public class Ingreso extends JFrame {
                 System.out.println(factura);
                 Controller enviar = new Controller();
                 listaValidacion(factura);
-
-                if(!enviar.Asignacion(factura)){
+                boolean exito = enviar.Asignacion(factura);
+                if(!exito){
                     JOptionPane.showMessageDialog(null,"Ingreso incorrecto, verifique datos","Error",JOptionPane.ERROR_MESSAGE);
-                }else{
+                }else if(exito){
+                    facturaATexto(factura);
                     textFecha.setText("");
                     textRut.setText("");
                     textNumero.setText("");
                     textNombre.setText("");
-                    textNeto.setText("");
-                    textIva.setText("");
-                    textCarne.setText("");
-                    textHarina.setText("");
-                    textIla.setText("");
-                    textTotal.setText("");
-                    check.setVisible(true);
+                    textNeto.setText("0");
+                    textIva.setText("0");
+                    textCarne.setText("0");
+                    textHarina.setText("0");
+                    textIla.setText("0");
+                    textTotal.setText("0");
+                    System.out.println("llegue aca");
                 }
             }
         });
@@ -224,5 +226,25 @@ public class Ingreso extends JFrame {
                }
        }
        System.out.println(factura);
+   }
+
+   private void facturaATexto(List<String> factura){
+        String path = "/home/beto/Escritorio/Proyecto/Facturas-master/src/main/resources/facturas.txt";
+        File TextFile = new File(path);
+       FileWriter TextOut = null;
+       try {
+           TextOut = new FileWriter(TextFile, true);
+       } catch (IOException e) {
+           e.printStackTrace();
+       }
+       String facturaDatos="";
+       for ( String f: factura ) {
+           facturaDatos+=";"+f;
+       }
+       try {
+           TextOut.write(facturaDatos);
+       } catch (IOException e) {
+           e.printStackTrace();
+       }
    }
 }

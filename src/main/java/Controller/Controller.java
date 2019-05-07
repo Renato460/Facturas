@@ -24,9 +24,9 @@ public class Controller {
         try {
             Facturas facturaNueva = new Facturas();
             SimpleDateFormat formatter1 = new SimpleDateFormat("dd/MM/yyyy");
-            facturaNueva.setTipo(factura.get(0));
+            facturaNueva.setTipo(factura.get(0).toUpperCase());
             facturaNueva.setFecha(formatter1.parse(factura.get(1)));
-            facturaNueva.setEmpresa(Empresa.getUserById(factura.get(2)));
+            facturaNueva.setEmpresa(Empresa.getUserById(factura.get(2).toUpperCase()));
             facturaNueva.setNumFactura(factura.get(3));
             if (factura.get(0).equals("Factura"))
             {

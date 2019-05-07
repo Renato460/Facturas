@@ -9,9 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,11 +52,15 @@ public class Ingreso extends JFrame {
         this.nombreRequerido.setVisible(false);
         this.netoRequerido.setVisible(false);
         this.setVisible(true);
-        this.textNeto.setText("0");
-        this.textIva.setText("0");
+        this.textRut.setText("81.229.500-4");
+        this.textNombre.setText("ANSALDI Y CIA. LTDA.");
+        this.textNumero.setText("43");
+        this.textNeto.setText("3000");
+        this.textIva.setText("234");
         this.textCarne.setText("0");
         this.textHarina.setText("0");
         this.textIla.setText("0");
+        this.textTotal.setText("4555");
 
 
         ingresarButton.addActionListener(new ActionListener() {
@@ -228,23 +230,29 @@ public class Ingreso extends JFrame {
        System.out.println(factura);
    }
 
-   private void facturaATexto(List<String> factura){
-        String path = "/home/beto/Escritorio/Proyecto/Facturas-master/src/main/resources/facturas.txt";
-        File TextFile = new File(path);
-       FileWriter TextOut = null;
-       try {
-           TextOut = new FileWriter(TextFile, true);
-       } catch (IOException e) {
-           e.printStackTrace();
-       }
-       String facturaDatos="";
-       for ( String f: factura ) {
-           facturaDatos+=";"+f;
+   private void facturaATexto(@NotNull List<String> factura){
+       String path = "/home/beto/Escritorio/Proyecto/Facturas-master/src/main/resources/facturas.txt";
+       File TextFile = new File(path);
+       BufferedWriter bw = null;
+       FileWriter fw = null;
+       String facturas = textNombre.getText()+";";
+       for (String fac: factura) {
+           facturas += fac.toUpperCase() + ";";
        }
        try {
-           TextOut.write(facturaDatos);
-       } catch (IOException e) {
-           e.printStackTrace();
+           fw = new FileWriter(TextFile.getAbsoluteFile(), true);
+           bw = new BufferedWriter(fw);
+            bw.write(facturas+System.getProperty("line.separator"));
+            bw.flush();
+           System.out.println(facturas);
+       }catch(IOException ex ){
+           // File writing/opening failed at some stage.
+       }finally {                       // always close the file
+           if (bw != null) try {
+               bw.close();
+           } catch (IOException ioe2) {
+               // just ignore it
+           }
        }
    }
 }

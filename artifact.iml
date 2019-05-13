@@ -5,7 +5,7 @@
       <configuration>
         <setting name="validation-enabled" value="true" />
         <datasource-mapping>
-          <factory-entry name="org.hibernate.tutorial.jpa" />
+          <factory-entry name="org.hibernate.tutorial.jpa" value="0df10a2c-080a-4758-970d-0151f9a7222a" />
         </datasource-mapping>
         <naming-strategy-map />
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/src/main/resources/META-INF/persistence.xml" />

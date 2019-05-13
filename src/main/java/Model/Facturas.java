@@ -5,6 +5,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table (name = "facturas")
@@ -51,6 +52,42 @@ public class Facturas {
     @ManyToOne
     @JoinColumn(name="rut", nullable=false)
     private Empresa empresa;
+
+    @org.jetbrains.annotations.NotNull
+    public static Boolean getFacturaById(String rut, String numeroFactura) {
+        boolean encontrado=false;
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("org.hibernate.tutorial.jpa");;
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        EntityTransaction entityTransaction = null;
+        try{
+            entityTransaction = entityManager.getTransaction();
+            entityTransaction.begin();
+
+            //Facturas factura = entityManager.find(Facturas.class, numeroFactura);
+            Query  query = entityManager.createQuery("SELECT a FROM Facturas a");
+            List<Facturas> facturas = query.getResultList();
+            entityTransaction.commit();
+            for (Facturas factura : facturas){
+                if (factura.getNumFactura().equals(numeroFactura) && (factura.getEmpresa().getRut().equals(rut))){
+                    encontrado = true;
+                    break;
+                }
+            }
+            if (encontrado){
+                return encontrado;
+            }else {
+                return encontrado;
+            }
+
+
+        }catch (RuntimeException e){
+            if (entityTransaction.isActive())entityTransaction.rollback();
+            throw e;
+        }finally {
+            entityManager.close();
+            entityManagerFactory.close();
+        }
+    }
 
     public String getTipo() {
         return tipo;

@@ -2,6 +2,7 @@ package views;
 
 import Controller.Controller;
 import Model.Empresa;
+import Model.Facturas;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -12,6 +13,7 @@ import java.awt.event.KeyEvent;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import static Model.Empresa.getUserById;
 
@@ -34,6 +36,7 @@ public class Ingreso extends JFrame {
     private JTextField textFecha;
     private JLabel rutRequerido;
     private JLabel labelFac;
+    private JButton pathFile;
     //private List<String> facturaRevisada;
     private Double neto;
     private Double iva;
@@ -41,10 +44,13 @@ public class Ingreso extends JFrame {
     private Double harina;
     private Double ila;
     private Double total;
+    private String path;// = "/home/beto/Escritorio/Proyecto/Facturas-master/src/main/resources/facturas.txt";
 
     public Ingreso(){
+        //this.setIconImage(new ImageIcon("list.png").getImage());
         add(jPanelP);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setTitle("Facturas y notas de Crédito");
         this.setSize(768,480);
         this.setLocationRelativeTo(null);
         this.rutRequerido.setVisible(false);
@@ -52,7 +58,10 @@ public class Ingreso extends JFrame {
         this.nombreRequerido.setVisible(false);
         this.netoRequerido.setVisible(false);
         this.setVisible(true);
-        this.textRut.setText("81.229.500-4");
+        this.textCarne.setText("0");
+        this.textHarina.setText("0");
+        this.textIla.setText("0");
+        /*this.textRut.setText("81.229.500-4");
         this.textNombre.setText("ANSALDI Y CIA. LTDA.");
         this.textNumero.setText("43");
         this.textNeto.setText("3000");
@@ -60,47 +69,50 @@ public class Ingreso extends JFrame {
         this.textCarne.setText("0");
         this.textHarina.setText("0");
         this.textIla.setText("0");
-        this.textTotal.setText("4555");
+        this.textTotal.setText("4555");*/
 
 
         ingresarButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                List<String> factura = new ArrayList<String>();
-                if(notaCheck.isSelected()){
-                       factura.add("Nota de Credito");
-                }else
-                    {
-                       factura.add("Factura");
+                if(!Facturas.getFacturaById(textRut.getText(), textNumero.getText())){
+                    List<String> factura = new ArrayList<String>();
+                    if (notaCheck.isSelected()) {
+                        factura.add("Nota de Credito");
+                    } else {
+                        factura.add("Factura");
                     }
 
-                factura.add(textFecha.getText());
-                factura.add(textRut.getText());
-                factura.add(textNumero.getText());
-                factura.add(textNeto.getText());
-                factura.add(textIva.getText());
-                factura.add(textCarne.getText());
-                factura.add(textHarina.getText());
-                factura.add(textIla.getText());
-                factura.add(textTotal.getText());
-                System.out.println(factura);
-                Controller enviar = new Controller();
-                listaValidacion(factura);
-                boolean exito = enviar.Asignacion(factura);
-                if(!exito){
-                    JOptionPane.showMessageDialog(null,"Ingreso incorrecto, verifique datos","Error",JOptionPane.ERROR_MESSAGE);
-                }else if(exito){
-                    facturaATexto(factura);
-                    textFecha.setText("");
-                    textRut.setText("");
-                    textNumero.setText("");
-                    textNombre.setText("");
-                    textNeto.setText("0");
-                    textIva.setText("0");
-                    textCarne.setText("0");
-                    textHarina.setText("0");
-                    textIla.setText("0");
-                    textTotal.setText("0");
-                    System.out.println("llegue aca");
+                    factura.add(textFecha.getText());
+                    factura.add(textRut.getText());
+                    factura.add(textNumero.getText());
+                    factura.add(textNeto.getText());
+                    factura.add(textIva.getText());
+                    factura.add(textCarne.getText());
+                    factura.add(textHarina.getText());
+                    factura.add(textIla.getText());
+                    factura.add(textTotal.getText());
+                    System.out.println(factura);
+                    Controller enviar = new Controller();
+                    listaValidacion(factura);
+                    boolean exito = enviar.Asignacion(factura);
+                    if (!exito) {
+                        JOptionPane.showMessageDialog(null, "Ingreso incorrecto, verifique datos", "Error", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        facturaATexto(factura);
+                        textFecha.setText("");
+                        textRut.setText("");
+                        textNumero.setText("");
+                        textNombre.setText("");
+                        textNeto.setText("0");
+                        textIva.setText("0");
+                        textCarne.setText("0");
+                        textHarina.setText("0");
+                        textIla.setText("0");
+                        textTotal.setText("0");
+                        System.out.println("llegue aca");
+                    }
+                }else {
+                    JOptionPane.showMessageDialog(null, "Factura ya ingresada","Error",JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -159,7 +171,7 @@ public class Ingreso extends JFrame {
                     total=neto + iva + carne + harina + ila;
                     textTotal.setText(total.toString());
                 }catch (Exception ee){
-
+                    ee.printStackTrace();
                 }
             }
         });
@@ -172,6 +184,7 @@ public class Ingreso extends JFrame {
                     total=neto + iva + carne + harina + ila;
                     textTotal.setText(total.toString());
                 }catch (Exception ee){
+                    ee.printStackTrace();
 
                 }
             }
@@ -185,7 +198,38 @@ public class Ingreso extends JFrame {
                     total=neto + iva + carne + harina + ila;
                     textTotal.setText(total.toString());
                 }catch (Exception ee){
+                    ee.printStackTrace();
+                }
+            }
+        });
+        pathFile.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                File archivo;
+                JFileChooser chooser = new JFileChooser(); // ruta donde se va a abrir por defecto el selector de archivos
+                chooser.setCurrentDirectory(new java.io.File(".txt"));  //validamos el tipo de extensión
+                if((chooser.showDialog(null, "Abrir"))== JFileChooser.APPROVE_OPTION){ // si le dieron clic en el botón abrir
+                    archivo = chooser.getSelectedFile(); // selecciona el archivo y lo guarda en archivo
+                    if(archivo.canRead()){ // si se puede leer el archivo
+                        if(archivo.getName().endsWith("txt")){ // se valida el tipo de extensión denuevo
+                            //path =archivo.getAbsoluteFile().toString(); // la ruta del archivo se la asigna a ruta
+                            Properties p = new Properties();
+                            try {
+                                InputStream propertiesStream = ClassLoader.getSystemResourceAsStream("config.properties");
+                                //InputStream propertiesStream = new FileInputStream("config.properties");
+                                p.load(propertiesStream);
+                                p.setProperty("path", archivo.getAbsoluteFile().toString());
+                                File file = new FileWriter(getClass().getResource("config.properties").getFile());
+                                p.store( new FileWriter(file) , "Archivo de salida txt");
+                                System.out.println(p.getProperty("path"));
+                                propertiesStream.close();
+                            }catch (IOException ex){
+                                ex.printStackTrace();
+                            }
 
+                        }else{
+                            JOptionPane.showMessageDialog(null, "Archivo con diferente extensión","Error al cargar el archivo", JOptionPane.WARNING_MESSAGE);
+                        }
+                    }
                 }
             }
         });
@@ -231,28 +275,47 @@ public class Ingreso extends JFrame {
    }
 
    private void facturaATexto(@NotNull List<String> factura){
-       String path = "/home/beto/Escritorio/Proyecto/Facturas-master/src/main/resources/facturas.txt";
+       Properties p = new Properties();
+       try {
+           InputStream configInput = ClassLoader.getSystemResourceAsStream("config.properties");
+           //InputStream configInput= new FileInputStream("config.properties");
+           //p.load(new FileReader("resources/Propiedades/config.properties"));
+           //p.load(propertiesStream);
+           //InputStream configInput = new FileInputStream("/home/beto/Proyectos/web/Facturas-master/src/main/resources/config.properties");
+           p.load(configInput);
+           System.out.println(p.getProperty("path"));
+           path = p.getProperty("path");
+       } catch (IOException e) {
+           e.printStackTrace();
+       }
+
+
        File TextFile = new File(path);
        BufferedWriter bw = null;
-       FileWriter fw = null;
-       String facturas = textNombre.getText()+";";
+       FileWriter fw;
+       StringBuilder facturas = new StringBuilder(textNombre.getText() + ";");
        for (String fac: factura) {
-           facturas += fac.toUpperCase() + ";";
+           facturas.append(fac.toUpperCase()).append(";");
        }
        try {
-           fw = new FileWriter(TextFile.getAbsoluteFile(), true);
+           fw = new FileWriter(TextFile, true);
            bw = new BufferedWriter(fw);
             bw.write(facturas+System.getProperty("line.separator"));
             bw.flush();
            System.out.println(facturas);
        }catch(IOException ex ){
-           // File writing/opening failed at some stage.
-       }finally {                       // always close the file
-           if (bw != null) try {
-               bw.close();
-           } catch (IOException ioe2) {
-               // just ignore it
-           }
+           ex.printStackTrace();
+
+       }finally {
+
+           if (bw != null)
+               try {
+                   bw.close();
+
+               } catch (IOException ioe2)
+               {
+                   ioe2.printStackTrace();
+               }
        }
    }
 }

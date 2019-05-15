@@ -6,10 +6,7 @@ import Model.Facturas;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +30,12 @@ public class Ingreso extends JFrame {
     private JLabel nombreRequerido;
     private JLabel netoRequerido;
     private JCheckBox notaCheck;
-    private JTextField textFecha;
+    private JTextField textDia;
     private JLabel rutRequerido;
     private JLabel labelFac;
     private JButton pathFile;
+    private JTextField textMesAno;
+    private JTextField textExento;
     //private List<String> facturaRevisada;
     private Double neto;
     private Double iva;
@@ -44,6 +43,7 @@ public class Ingreso extends JFrame {
     private Double harina;
     private Double ila;
     private Double total;
+    private Double exento;
     private String path;// = "/home/beto/Escritorio/Proyecto/Facturas-master/src/main/resources/facturas.txt";
 
     public Ingreso(){
@@ -61,6 +61,8 @@ public class Ingreso extends JFrame {
         this.textCarne.setText("0");
         this.textHarina.setText("0");
         this.textIla.setText("0");
+        this.textIva.setText("0");
+        this.textExento.setText("0");
         /*this.textRut.setText("81.229.500-4");
         this.textNombre.setText("ANSALDI Y CIA. LTDA.");
         this.textNumero.setText("43");
@@ -77,20 +79,21 @@ public class Ingreso extends JFrame {
                 if(!Facturas.getFacturaById(textRut.getText(), textNumero.getText())){
                     List<String> factura = new ArrayList<String>();
                     if (notaCheck.isSelected()) {
-                        factura.add("Nota de Credito");
+                        factura.add("Nota de Credito");//<<---- index 0
                     } else {
-                        factura.add("Factura");
+                        factura.add("Factura");//<<---- index 0
                     }
-
-                    factura.add(textFecha.getText());
-                    factura.add(textRut.getText());
-                    factura.add(textNumero.getText());
-                    factura.add(textNeto.getText());
-                    factura.add(textIva.getText());
-                    factura.add(textCarne.getText());
-                    factura.add(textHarina.getText());
-                    factura.add(textIla.getText());
-                    factura.add(textTotal.getText());
+                    String fecha = textDia.getText()+"/"+textMesAno.getText();
+                    factura.add(fecha);//<<---- index 1
+                    factura.add(textRut.getText());//<<---- index 2
+                    factura.add(textNumero.getText());//<<---- index 3
+                    factura.add(textNeto.getText());//<<---- index 4
+                    factura.add(textIva.getText());//<<---- index 5
+                    factura.add(textCarne.getText());//<<---- index 6
+                    factura.add(textHarina.getText());//<<---- index 7
+                    factura.add(textIla.getText());//<<---- index 8
+                    factura.add(textTotal.getText());//<<---- index 9
+                    factura.add(textExento.getText());//<<---- index 10
                     System.out.println(factura);
                     Controller enviar = new Controller();
                     listaValidacion(factura);
@@ -99,7 +102,7 @@ public class Ingreso extends JFrame {
                         JOptionPane.showMessageDialog(null, "Ingreso incorrecto, verifique datos", "Error", JOptionPane.ERROR_MESSAGE);
                     } else {
                         facturaATexto(factura);
-                        textFecha.setText("");
+                        textDia.setText("");
                         textRut.setText("");
                         textNumero.setText("");
                         textNombre.setText("");
@@ -109,6 +112,7 @@ public class Ingreso extends JFrame {
                         textHarina.setText("0");
                         textIla.setText("0");
                         textTotal.setText("0");
+                        textExento.setText("0");
                         System.out.println("llegue aca");
                     }
                 }else {
@@ -117,10 +121,22 @@ public class Ingreso extends JFrame {
             }
         });
 
-        textRut.addKeyListener(new KeyAdapter() {
+        /*textRut.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
                 super.keyReleased(e);
+                try {
+                    Empresa empresa = getUserById(textRut.getText());
+                    textNombre.setText(empresa.getNombre());
+                }catch (Exception ex){
+                    textNombre.setText("No existe empresa");
+                }
+            }
+        });*/
+        textRut.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                super.focusLost(e);
                 try {
                     Empresa empresa = getUserById(textRut.getText());
                     textNombre.setText(empresa.getNombre());
@@ -153,12 +169,13 @@ public class Ingreso extends JFrame {
                     carne = Double.parseDouble(textCarne.getText());
                     harina = Double.parseDouble(textHarina.getText());
                     ila = Double.parseDouble(textIla.getText());
-                    total = neto + iva + carne + harina + ila;
+                    exento = Double.parseDouble(textExento.getText());
+                    total = neto + iva + carne + harina + ila + exento;
                     textTotal.setText(total.toString());
                    // System.out.println(total);
                 }catch (Exception ex){
 
-                    System.out.println(textNeto.getText());
+                    //System.out.println(textNeto.getText());
                 }
             }
         });
@@ -168,7 +185,7 @@ public class Ingreso extends JFrame {
                 super.keyReleased(e);
                 try{
                     carne = Double.parseDouble(textCarne.getText());
-                    total=neto + iva + carne + harina + ila;
+                    total=neto + iva + carne + harina + ila + exento;
                     textTotal.setText(total.toString());
                 }catch (Exception ee){
                     ee.printStackTrace();
@@ -181,7 +198,7 @@ public class Ingreso extends JFrame {
                 super.keyReleased(e);
                 try{
                     harina = Double.parseDouble(textHarina.getText());
-                    total=neto + iva + carne + harina + ila;
+                    total=neto + iva + carne + harina + ila + exento;
                     textTotal.setText(total.toString());
                 }catch (Exception ee){
                     ee.printStackTrace();
@@ -195,13 +212,15 @@ public class Ingreso extends JFrame {
                 super.keyReleased(e);
                 try{
                     ila = Double.parseDouble(textIla.getText());
-                    total=neto + iva + carne + harina + ila;
+                    total=neto + iva + carne + harina + ila + exento;
                     textTotal.setText(total.toString());
                 }catch (Exception ee){
                     ee.printStackTrace();
                 }
             }
         });
+
+
         pathFile.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 File archivo;
@@ -214,13 +233,13 @@ public class Ingreso extends JFrame {
                             //path =archivo.getAbsoluteFile().toString(); // la ruta del archivo se la asigna a ruta
                             Properties p = new Properties();
                             try {
-                                InputStream propertiesStream = ClassLoader.getSystemResourceAsStream("config.properties");
-                                //InputStream propertiesStream = new FileInputStream("config.properties");
+                                //InputStream propertiesStream = ClassLoader.getSystemResourceAsStream("config.properties");
+                                InputStream propertiesStream = new FileInputStream("config.properties");
                                 p.load(propertiesStream);
                                 p.setProperty("path", archivo.getAbsoluteFile().toString());
-                                File file = new FileWriter(getClass().getResource("config.properties").getFile());
+                                File file = new File("config.properties");
                                 p.store( new FileWriter(file) , "Archivo de salida txt");
-                                System.out.println(p.getProperty("path"));
+                                //System.out.println(p.getProperty("path"));
                                 propertiesStream.close();
                             }catch (IOException ex){
                                 ex.printStackTrace();
@@ -230,6 +249,19 @@ public class Ingreso extends JFrame {
                             JOptionPane.showMessageDialog(null, "Archivo con diferente extensión","Error al cargar el archivo", JOptionPane.WARNING_MESSAGE);
                         }
                     }
+                }
+            }
+        });
+        textExento.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                super.keyReleased(e);
+                try{
+                    exento = Double.parseDouble(textExento.getText());
+                    total=neto + iva + carne + harina + ila + exento;
+                    textTotal.setText(total.toString());
+                }catch (Exception ee){
+                    ee.printStackTrace();
                 }
             }
         });
@@ -252,6 +284,9 @@ public class Ingreso extends JFrame {
                            case 8:
                                textIla.setText("0");
                                break;
+                           case 10:
+                               textExento.setText("0");
+                               break;
                        }
 
                    } else if (i == 1 || i == 2 || i == 3 || i == 4) {
@@ -271,19 +306,19 @@ public class Ingreso extends JFrame {
                    }
                }
        }
-       System.out.println(factura);
+       //System.out.println(factura);
    }
 
    private void facturaATexto(@NotNull List<String> factura){
        Properties p = new Properties();
        try {
-           InputStream configInput = ClassLoader.getSystemResourceAsStream("config.properties");
-           //InputStream configInput= new FileInputStream("config.properties");
+           //7InputStream configInput = ClassLoader.getSystemResourceAsStream("config.properties");
+           InputStream configInput= new FileInputStream("config.properties");
            //p.load(new FileReader("resources/Propiedades/config.properties"));
            //p.load(propertiesStream);
            //InputStream configInput = new FileInputStream("/home/beto/Proyectos/web/Facturas-master/src/main/resources/config.properties");
            p.load(configInput);
-           System.out.println(p.getProperty("path"));
+           //System.out.println(p.getProperty("path"));
            path = p.getProperty("path");
        } catch (IOException e) {
            e.printStackTrace();
@@ -302,7 +337,7 @@ public class Ingreso extends JFrame {
            bw = new BufferedWriter(fw);
             bw.write(facturas+System.getProperty("line.separator"));
             bw.flush();
-           System.out.println(facturas);
+           //System.out.println(facturas);
        }catch(IOException ex ){
            ex.printStackTrace();
 

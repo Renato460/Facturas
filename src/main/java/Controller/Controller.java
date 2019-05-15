@@ -44,6 +44,7 @@ public class Controller {
                 facturaNueva.setTotal(Double.parseDouble(factura.get(9)));
                 //System.out.println("total"+this.Total);
                 //PushFactura(facturaNueva);
+                facturaNueva.setExento(Double.parseDouble(factura.get(10)));
                 return PushFactura(facturaNueva);
             }else if (factura.get(0).equals("Nota de Credito")){
 
@@ -59,6 +60,7 @@ public class Controller {
                 //System.out.println("ila"+this.Ila);
                 facturaNueva.setTotal((-1)*Double.parseDouble(factura.get(9)));
                 //System.out.println("total"+this.Total);
+                facturaNueva.setExento(Double.parseDouble(factura.get(10)));
                 //PushFactura(facturaNueva);
                 return PushFactura(facturaNueva);
             }else {

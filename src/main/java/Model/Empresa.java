@@ -37,6 +37,9 @@ public class Empresa {
        }catch (RuntimeException e){
            if (entityTransaction.isActive())entityTransaction.rollback();
            throw e;
+       }finally {
+           entityManager.close();
+           entityManagerFactory.close();
        }
     }
 

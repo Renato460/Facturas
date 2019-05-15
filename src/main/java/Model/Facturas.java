@@ -49,6 +49,10 @@ public class Facturas {
     @NotNull
     private Double total;
 
+    @Column (name = "exento")
+    @NotNull
+    private Double exento;
+
     @ManyToOne
     @JoinColumn(name="rut", nullable=false)
     private Empresa empresa;
@@ -175,5 +179,13 @@ public class Facturas {
 
     public void setTotal(Double total) {
         this.total = total;
+    }
+
+    public Double getExento() {
+        return exento;
+    }
+
+    public void setExento(Double exento) {
+        this.exento = exento;
     }
 }
